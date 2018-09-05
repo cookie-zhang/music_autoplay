@@ -15,10 +15,12 @@
 
 <body>
   <audio id="music_audio" controls autoplay></audio>
-  <audio id="myaudio" controls autoplay></audio>
+  <video muted="false"  id="myaudio" controls autoplay>
+  </video>
 </body>
 
 </html>
+<script src="./jquery-1.11.1.min.js"></script>
 <script>
   // window.onload = function () { //页面加载
   //   new Play().init()
@@ -43,7 +45,23 @@
   //     }
   //   }
   // }
+
+
+
+
+
+ window.onload = function () { //页面加载
+ 
+
+    var audio = document.getElementById('myaudio');
+    setInterval(function(){
+      audio.muted = false;
+      audio.play();
+    },100)
+
   
+ 
+  }
 
 
 
@@ -63,102 +81,79 @@
 
 
 
+  //mp3文件名
+  var mp3List = ["./dream.mp3", "./诗和远方.mp3"],
+    i = 0;
 
-
-
-
-//mp3文件名
-var mp3List = ["./dream.mp3","./诗和远方.mp3"],i = 0;
-function getMusic(list) {
-    var len = list.length, music = '';
-     if (i<len){
-        music =list[i];
-       i++;
-     }
-    if(music) {
-        return music;
+  function getMusic(list) {
+    var len = list.length,
+      music = '';
+    if (i < len) {
+      music = list[i];
+      i++;
+    }
+    if (music) {
+      return music;
     } else {
-     
-        getMusic(list);
+
+      getMusic(list);
 
     }
-}
-canPlay(playAudio);
-//查看是否支持audio标签，如果支持，预加载当前指向mp3文件
-function canPlay(callback) {
-                 
+  }
+  canPlay(playAudio);
+  //查看是否支持audio标签，如果支持，预加载当前指向mp3文件
+  function canPlay(callback) {
+
     var currentFile = getMusic(mp3List);
     try {
-        var audio = new Audio();
-         
-        audio.oncanplay = function() {
-            callback(currentFile);
-        }
+      var audio = new Audio();
 
-        audio.src = currentFile;
-         
-        audio.load();
-    }catch(e){
-            callback(false, e);
+      audio.oncanplay = function () {
+        callback(currentFile);
+      }
+
+      audio.src = currentFile;
+
+      audio.load();
+    } catch (e) {
+      callback(false, e);
     }
-}
- 
- 
+  }
 
-// function sleep(numberMillis) {
-//   var now = new Date();
-//   var exitTime = now.getTime() + numberMillis;
-//   while (true) {
-//     now = new Date();
-//     if (now.getTime() > exitTime)return;
-//   }
-// }
-function playAudio(currentFile) {
+
+
+  // function sleep(numberMillis) {
+  //   var now = new Date();
+  //   var exitTime = now.getTime() + numberMillis;
+  //   while (true) {
+  //     now = new Date();
+  //     if (now.getTime() > exitTime)return;
+  //   }
+  // }
+  function playAudio(currentFile) {
     // Check for audio element support.
     if (window.HTMLAudioElement && currentFile) {
-        try {
-            var oAudio = document.getElementById('myaudio');
-              
-            oAudio.src = currentFile;
+      try {
+        var oAudio = document.getElementById('myaudio');
 
-            if (oAudio.paused) {
-                oAudio.play();
-            } else {
-                oAudio.pause();
-            }
+        oAudio.src = currentFile;
 
-            oAudio.onended = function() {
-                oAudio.src = getMusic(mp3List);
-                oAudio.play();
-            }
-
-        } catch (e) {
-            // Fail silently but show in F12 developer tools console
-            //  if(window.console && console.error("Error:" + e));
+        if (oAudio.paused) {
+          oAudio.play();
+        } else {
+          oAudio.pause();
         }
-       
+
+        oAudio.onended = function () {
+          oAudio.src = getMusic(mp3List);
+          oAudio.play();
+        }
+
+      } catch (e) {
+        // Fail silently but show in F12 developer tools console
+        //  if(window.console && console.error("Error:" + e));
+      }
+
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 </script>
